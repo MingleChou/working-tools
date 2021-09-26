@@ -31,6 +31,8 @@ public class FileController {
      */
     @PostMapping(value = "/mergeFiles")
     public ResponseEntity<ByteArrayResource> mergeFiles(@RequestParam(value = "files") MultipartFile[] files,
+                                                    @RequestParam(value = "index") int index,
+                                                        @RequestParam(value = "endIdx") int endIdx,
                                                     HttpServletRequest request) {
         try {
             InputStreamResource[] fileInputAsResources = new InputStreamResource[files.length];
@@ -48,7 +50,7 @@ public class FileController {
                     }
                 };
             }
-            byte[] bytes = ExcOperator.merge(fileInputAsResources);
+            byte[] bytes = ExcOperator.merge(fileInputAsResources, index, endIdx);
             ByteArrayResource br = new ByteArrayResource(bytes);
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("application/octet-stream"))
